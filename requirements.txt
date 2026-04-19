@@ -1,0 +1,5 @@
+paddleocr
+fastapi
+uvicorn
+numpy
+Pillow
