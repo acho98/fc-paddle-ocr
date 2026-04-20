@@ -66,17 +66,28 @@ Content-Type: application/json
 }
 
 
-6. 서버 중지
+6. 업데이트 (git pull 후 재시작)
+------------------------------------------------------------
+$ pkill -f "uvicorn main:app"
+$ rm -rf __pycache__
+$ git pull
+$ nohup uvicorn main:app --host 0.0.0.0 --port 8002 > ocr_server.log 2>&1 &
+
+# 헬스체크로 정상 확인
+$ curl http://localhost:8002/health
+
+
+7. 서버 중지
 ------------------------------------------------------------
 $ pkill -f "uvicorn main:app"
 
 
-7. 로그 확인
+8. 로그 확인
 ------------------------------------------------------------
 $ tail -f ocr_server.log
 
 
-8. 트러블슈팅
+9. 트러블슈팅
 ------------------------------------------------------------
 Q: "No module named paddle" 에러
 A: paddlepaddle-gpu 설치 확인. Python 3.11 필수.
