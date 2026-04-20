@@ -49,7 +49,7 @@ for gpu_id, ocr in enumerate(ocr_instances):
 os.unlink("/tmp/_warmup.jpg")
 print(f"모델 로딩 + 워밍업 완료 (GPU {GPU_COUNT}개)")
 
-REG_NO = re.compile(r"\d{6}[-\u2013\u2014]?\d{7}")
+REG_NO = re.compile(r"\d{6}[-\u2013\u2014]\d{7}")
 
 
 class OCRRequest(BaseModel):
