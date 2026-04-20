@@ -136,10 +136,23 @@ def extract(req: OCRRequest):
         masking_targets = []
         if req.detect_pii:
             for i, txt in enumerate(texts):
-                if REG_NO.search(txt) and i < len(boxes):
+                match = REG_NO.search(txt)
+                if match and i < len(boxes):
+                    x1, y1, x2, y2 = [int(x) for x in boxes[i]]
+                    text_len = len(txt)
+                    if text_len > 0:
+                        # 뒷자리 7자리 시작/끝 위치 비율로 sub-bbox 계산
+                        back_start = match.end() - 7
+                        back_end = match.end()
+                        ratio_start = back_start / text_len
+                        ratio_end = back_end / text_len
+                        mask_x1 = int(x1 + (x2 - x1) * ratio_start)
+                        mask_x2 = int(x1 + (x2 - x1) * ratio_end)
+                    else:
+                        mask_x1, mask_x2 = x1, x2
                     masking_targets.append({
                         "full_text": txt,
-                        "bbox": [int(x) for x in boxes[i]],
+                        "bbox": [mask_x1, y1, mask_x2, y2],
                     })
             if masking_targets:
                 pages_with_regno += 1
